@@ -23,7 +23,7 @@
 
 ;;; Commentary:
 
-;; narumi-mode is a major mode that shows a dashboard as a splash screen.
+;; narumi-mode is a major mode that shows a dashboard.
 ;; It shows random sampled image in a directry, bookmarks, and recent files.
 ;; You can change the wallpaper to the image on the dashboard.
 ;; Since it is a dashboard,
