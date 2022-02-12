@@ -95,7 +95,8 @@ This works for sway users."
     (with-current-buffer buffer-name
       (narumi-mode))
     (set-window-buffer (selected-window)
-		       buffer-name)))
+		       buffer-name)
+    (switch-to-buffer narumi-buffer-name)))
 
 (defun narumi--calc-scale
     (image-width image-height width height max-height-ratio)
@@ -237,7 +238,7 @@ The returned object can contain the margin attribute."
   (recentf-mode t)
   (setq buffer-read-only nil)
   (erase-buffer)
-  (forward-line 0)
+  (goto-char (point-min))
   (if narumi-display-image
       (narumi--put-image))
   ;(newline)
@@ -250,7 +251,8 @@ The returned object can contain the margin attribute."
   (newline)
   (dolist (recent-file recentf-list)
     (narumi--insert-entry recent-file recent-file))
-  (forward-line 3)
+  (goto-char (point-min))
+  (forward-line 1)
   (setq buffer-read-only t))
 
 (define-derived-mode narumi-mode
