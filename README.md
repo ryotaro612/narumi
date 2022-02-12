@@ -15,4 +15,16 @@ Put `narumi-mode.el` in a directory that Emacs can see.
 
 ## Usage
 
+narumi selects an image in the customizable variable `narumi-image-directory` at ramdom.
+It refreshses the dashboard  when you type `r`.
+When you type `RET` on `""Set the image as the wallpaper."`, narumi passes the file path to customized variable `narumi-wallpaper-cmd`.
+The default function is for sway users, and the body is as below.
 
+```
+(defun narumi--sway-bg (wallpaper-path)
+  "Use the image at `WALLPAPER-PATH' as the wallpaper.
+This works for sway users."
+  (concat "swaymsg output \"*\" bg \""
+	  (shell-quote-argument wallpaper-path)
+	  "\" fill"))
+```
