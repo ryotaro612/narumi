@@ -113,7 +113,7 @@ the range of `MAX-HEIGHT-RATIO' is (0 1), the sizes are in pixel."
 	    1.0
 	  (/ height-bound image-height))
       (if (<= image-height height-bound)
-	 ; width-bound < image-width
+	  ;; width-bound < image-width
 	(/ width-bound image-width)
 	(min (/ height-bound image-height)
 	     (/ width-bound image-width))))))
@@ -241,7 +241,6 @@ The returned object can contain the margin attribute."
   (goto-char (point-min))
   (if narumi-display-image
       (narumi--put-image))
-  ;(newline)
   (narumi--insert-title "Bookmarks")
   (newline)
   (dolist (bookmark-path (narumi--list-bookmarks))
