@@ -24,15 +24,16 @@
 ;;; Commentary:
 
 ;; narumi-mode is a major mode that shows a dashboard.  It shows
-;; random sampled image in a directry, bookmarks, and recent files.
+;; random sampled image in a directory, bookmarks, and recent files.
 ;; You can change the wallpaper to the image on the dashboard.  Since
 ;; it is a dashboard, you can go to the entries of bookmarks and
 ;; recent files by clicking them.
+
+;;; Code:
 (require 'bookmark)
 (require 'recentf)
 (require 'seq)
 
-;;; Code:
 (defgroup narumi-mode nil
   "Yet another splash screen."
   :prefix "narumi-"
@@ -40,7 +41,7 @@
 
 (defcustom narumi-buffer-name
   "*narumi*"
-  "The buffer name of `narumi-mode'."
+  "The buffer name of narumi-mode."
   :type 'string)
 
 (defcustom narumi-image-directory
@@ -65,7 +66,7 @@
 	    #'narumi--display))
 
 (defun narumi--sway-bg (wallpaper-path)
-  "Use the image at `WALLPAPER-PATH' as the wallpaper.
+  "Use the image at WALLPAPER-PATH as the wallpaper.
 This works for sway users."
   (concat "swaymsg output \"*\" bg \""
 	  (shell-quote-argument wallpaper-path)
@@ -88,7 +89,7 @@ This works for sway users."
      0)))
 
 (defun narumi--display ()
-  "Display the buffer of `narumi-mode' on the current window."
+  "Display the buffer of narumi-mode on the current window."
   (interactive)
   (let ((buffer-name narumi-buffer-name))
     (get-buffer-create buffer-name)
@@ -101,11 +102,11 @@ This works for sway users."
 (defun narumi--calc-scale
     (image-width image-height width height max-height-ratio)
   "Calculate an appropriate scale of a image.
-Take width(`IMAGE-WIDTH') and height(`IMAGE-HEIGHT') of an image,
-`WIDTH' and `HEIGHT' of area for narumi and `MAX-HEIGHT-RATIO'
+Take width(IMAGE-WIDTH) and height(IMAGE-HEIGHT) of an image,
+WIDTH and HEIGHT of area for narumi and MAX-HEIGHT-RATIO
 to calculate the scale that let image be in
-`WIDTH' x (`HEIGHT' * `MAX-HEIGHT-RATIO') area.
-the range of `MAX-HEIGHT-RATIO' is (0 1), the sizes are in pixel."
+WIDTH x (HEIGHT * MAX-HEIGHT-RATIO) area.
+the range of MAX-HEIGHT-RATIO is (0 1), the sizes are in pixel."
   (let ((height-bound (* height max-height-ratio))
 	(width-bound (* 0.9 width)))
     (if (<= image-width width-bound)
@@ -119,9 +120,9 @@ the range of `MAX-HEIGHT-RATIO' is (0 1), the sizes are in pixel."
 	     (/ width-bound image-width))))))
 
 (defun narumi--update-image-scale (image new-scale)
-  "Update the value of `IMAGE' with `NEW-SCALE'.
-Take `IMAGE' returned by `create-image',
-returning the new object with (:scale `NEW-SCALE')."
+  "Update the value of IMAGE with NEW-SCALE.
+Take IMAGE returned by `create-image',
+returning the new object with (:scale NEW-SCALE)."
   (let* ((scale-tag-pos (seq-position image :scale)))
     (if scale-tag-pos
 	(seq-map-indexed (lambda (item i)
@@ -132,7 +133,7 @@ returning the new object with (:scale `NEW-SCALE')."
       (append image (list :scale new-scale)))))
 
 (defun narumi--create-center-image (file-path)
-  "Create an image at `FILE-PATH' that `insert-image' can accept.
+  "Create an image at FILE-PATH that `insert-image' can accept.
 The returned object can contain the margin attribute."
   (let* ((image (create-image (expand-file-name file-path)))
 	 (image-width (car (image-size image t)))
@@ -199,7 +200,7 @@ The returned object can contain the margin attribute."
 			    text-properties)))))
 
 (defun narumi--insert-entry (title path)
-  "Insert a `TITLE' that is linked to `PATH'."
+  "Insert a TITLE that is linked to PATH."
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "RET") #'narumi--jump-entry)
     (insert "  ◯ ")
@@ -223,7 +224,7 @@ The returned object can contain the margin attribute."
 	  bookmark-alist))
 
 (defun narumi--insert-title (title)
-  "Add a headline `TITLE'."
+  "Add a headline TITLE."
   (add-text-properties 0
 		       (length title)
 		       '(face bookmark-menu-heading
