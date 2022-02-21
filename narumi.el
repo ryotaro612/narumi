@@ -1,4 +1,4 @@
-;;; narumi-mode.el --- A dashboard that displays a ramdom sampled image -*- lexical-binding: t -*-
+;;; narumi.el --- A dashboard that displays a ramdom sampled image -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2022 Nakamura, Ryotaro <nakamura.ryotaro.kzs@gmail.com>
 ;; Version: 1.0.0
@@ -23,7 +23,7 @@
 
 ;;; Commentary:
 
-;; narumi-mode is a major mode that shows a dashboard.  It shows
+;; narumi is a major mode that shows a dashboard.  It shows
 ;; random sampled image in a directory, bookmarks, and recent files.
 ;; You can change the wallpaper to the image on the dashboard.  Since
 ;; it is a dashboard, you can go to the entries of bookmarks and
@@ -34,14 +34,14 @@
 (require 'recentf)
 (require 'seq)
 
-(defgroup narumi-mode nil
+(defgroup narumi nil
   "Yet another splash screen."
   :prefix "narumi-"
   :group 'narumi)
 
 (defcustom narumi-buffer-name
   "*narumi*"
-  "The buffer name of narumi-mode."
+  "The buffer name of narumi."
   :type 'string)
 
 (defcustom narumi-image-directory
@@ -89,12 +89,12 @@ This works for sway users."
      0)))
 
 (defun narumi--display ()
-  "Display the buffer of narumi-mode on the current window."
+  "Display the buffer of narumi on the current window."
   (interactive)
   (let ((buffer-name narumi-buffer-name))
     (get-buffer-create buffer-name)
     (with-current-buffer buffer-name
-      (narumi-mode))
+      (narumi))
     (set-window-buffer (selected-window)
 		       buffer-name)
     (switch-to-buffer narumi-buffer-name)))
@@ -157,7 +157,7 @@ The returned object can contain the margin attribute."
 
 
 (defun narumi--find-image-files ()
-  "Return image jpeg or png image files in narumi-mode-image-directory."
+  "Return image jpeg or png image files in `narumi-image-directory'."
   (seq-filter (lambda (entry)
 		(let ((len (length entry)))
 		  (if (<= 4 len)
@@ -211,8 +211,8 @@ The returned object can contain the margin attribute."
 			path
 			'keymap
 			map))
-    (insert "\n") ;(newline) can append '_' to the paths.
-    ))
+    ;; (newline) can append '_' to the paths.
+    (insert "\n")))
 
 (defun narumi--list-bookmarks ()
   "Return the paths of the bookmarks."
@@ -234,7 +234,7 @@ The returned object can contain the margin attribute."
   (insert title))
 
 (defun narumi--refresh ()
-  "Refresh the *narumi* buffer."
+  "Refresh the buffer."
   (interactive)
   (recentf-mode t)
   (setq buffer-read-only nil)
@@ -255,11 +255,11 @@ The returned object can contain the margin attribute."
   (forward-line 1)
   (setq buffer-read-only t))
 
-(define-derived-mode narumi-mode
+(define-derived-mode narumi
   special-mode "narumi"
   "Display the links to locations you may visit."
-  (define-key narumi-mode-map "r" #'narumi--refresh)
+  (define-key narumi-map "r" #'narumi--refresh)
   (narumi--refresh))
 
-(provide 'narumi-mode)
-;;; narumi-mode.el ends here
+(provide 'narumi)
+;;; narumi.el ends here
