@@ -11,7 +11,9 @@ The following image is a screenshot of the mode.
 
 ## Installation
 
-Put `narumi.el` in a directory that Emacs can see.
+You can install the package from Melpa:
+
+M-x package-install RET narumi
 
 ## Usage
 
